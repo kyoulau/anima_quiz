@@ -7,13 +7,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.anima_quiz.feature.data.dao.PlayerDao
+import com.example.anima_quiz.feature.data.dao.QuestionDao
 import com.example.anima_quiz.feature.data.model.Player
 
 @Database(entities = [Player::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class QuizDatabase: RoomDatabase() {
 
-    abstract fun playerDao(): PlayerDao
+    abstract fun questionDao(): QuestionDao
 
     companion object{
         @Volatile

@@ -25,7 +25,7 @@ import com.example.anima_quiz.ui.theme.Anima_quizTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val dao = QuizDatabase.getDatabase(application).playerDao()
+        val dao = QuizDatabase.getDatabase(application).questionDao()
         val repository = QuestionRepository(dao)
         val factory =QuizViewModelFactory(repository)
         setContent {
