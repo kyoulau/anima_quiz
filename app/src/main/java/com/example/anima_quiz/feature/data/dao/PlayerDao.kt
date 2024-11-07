@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.anima_quiz.feature.data.model.Player
 
+@Dao
 interface PlayerDao {
     @Insert
     suspend fun insertPlayer(player: Player)

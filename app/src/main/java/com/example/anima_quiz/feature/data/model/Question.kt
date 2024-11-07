@@ -4,6 +4,9 @@ import  androidx.room.PrimaryKey
 
 @Entity(tableName = "question")
 data class Question(
+
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val questionText: String,
     val options: List<String>,
     val correctAnswerIndex: Int,
