@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.anima_quiz.ui.QuizApp
 import com.example.anima_quiz.ui.screens.MainScreen
 import com.example.anima_quiz.ui.screens.Welcome
 import com.example.anima_quiz.feature.data.database.QuizDatabase
@@ -41,7 +42,16 @@ fun SetupNavGraph(navController: NavHostController) {
             })
         }
         composable("main") {
-            MainScreen()
+            MainScreen { userName ->
+                navController.currentBackStackEntry?.savedStateHandle?.set(
+                    "userName",
+                    userName
+                )
+                navController.navigate("quizScreen")
+            }
+        }
+        composable("quizScreen") {
+            QuizApp(navController)
         }
     }
 }
