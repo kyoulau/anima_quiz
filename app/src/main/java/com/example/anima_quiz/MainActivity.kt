@@ -10,10 +10,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.anima_quiz.ui.screens.MainScreen
 import com.example.anima_quiz.ui.screens.Welcome
+import com.example.anima_quiz.feature.data.database.QuizDatabase
+import com.example.anima_quiz.feature.data.repository.QuestionRepository
+import com.example.anima_quiz.feature.data.viewModel.QuizViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val dao = QuizDatabase.getDatabase(application).questionDao()
+        val repository = QuestionRepository(dao)
+        val factory = QuizViewModelFactory(repository)
         setContent {
             MyApp()
         }
