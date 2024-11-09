@@ -26,10 +26,12 @@ fun QuizButtons(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = spacing/2)
-                    .background(color = Color.White),
+                    .padding(vertical = spacing/2),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                if (i + 1 >= answers.size) {
+                    Spacer(modifier = Modifier.weight(0.5f)) // Empty space to balance the row
+                }
                 // First button in the row
                 QuizButton(
                     text = answers[i],
@@ -45,7 +47,7 @@ fun QuizButtons(
                         modifier = Modifier.weight(1f)
                     )
                 } else {
-                    Spacer(modifier = Modifier.weight(1f)) // Empty space to balance the row
+                    Spacer(modifier = Modifier.weight(0.5f)) // Empty space to balance the row
                 }
             }
         }

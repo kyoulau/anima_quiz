@@ -1,6 +1,7 @@
 package com.example.anima_quiz.ui.components
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -20,40 +21,54 @@ import androidx.compose.ui.text.font.FontWeight
 fun QuizCompleted(
     score: Int,
     total: Int,
-    onRestart: () -> Unit, // Callback to restart the quiz
+    onRestart: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+    Box(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "Quiz Completed!",
-            style = MaterialTheme.typography.headlineMedium.copy(fontSize = 28.sp, fontWeight = FontWeight.Bold),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-        Text(
-            text = "Your Score: $score / $total",
-            style = MaterialTheme.typography.titleLarge.copy(fontSize = 24.sp),
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(
-            onClick = onRestart,
-            shape = RoundedCornerShape(25.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Green,
-                contentColor = Color.White
-            ),
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .height(50.dp)
-                .width(200.dp)
+                .fillMaxWidth()
+                .padding(24.dp)
+                .background(Color.White, shape = RoundedCornerShape(16.dp))
+                .padding(32.dp)
         ) {
-            Text("Restart Quiz", color = Color.White)
+            Text(
+                text = "Quiz Completed!",
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                ),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            Text(
+                text = "Your Score: $score / $total",
+                style = MaterialTheme.typography.titleLarge.copy(fontSize = 24.sp),
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Button(
+                onClick = onRestart,
+                shape = RoundedCornerShape(25.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = Color.White
+                ),
+                modifier = Modifier
+                    .height(50.dp)
+                    .width(200.dp)
+            ) {
+                Text("Restart Quiz", color = Color.White, fontWeight = FontWeight.Bold)
+            }
         }
     }
 }
