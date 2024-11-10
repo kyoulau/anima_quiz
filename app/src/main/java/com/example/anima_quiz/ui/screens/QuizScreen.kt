@@ -47,7 +47,6 @@ fun QuizScreen(
         isLoading = false
     }
     if (isLoading) {
-        // Loading animation
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -118,7 +117,6 @@ fun QuizScreen(
         }
     }
 
-    // LaunchedEffect outside the lambda, observing changes to isCorrect
     if (isCorrect != null) {
         Box(
             modifier = Modifier
