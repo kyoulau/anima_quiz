@@ -32,14 +32,14 @@ class QuestionList {
         ),
         Question(
             imageUrl = R.drawable.jjk1,
-            questionText = "Which Jujutsu Kaisen character is known for speaking very little?",
+            questionText = "Qual desses personagens é conhecido por falar pouco?",
             options = listOf("Panda", "Toge Inumaki", "Maki Zenin", "Yuta Okotsu"),
             correctAnswerIndex = 1,
             tips = listOf("awd")
         ),
         Question(
             imageUrl = R.drawable.jjk2,
-            questionText = "Qual desses personagens é conhecido por falar pouco?",
+            questionText = "Qual personagem utiliza uma técnica com bonecas voodoo?",
             options = listOf("Nobara Kugisaki", "Megumi Fushiguro", "Satoro Gojou", "Yuji Itadori"),
             correctAnswerIndex = 0,
             tips = listOf("awd")
