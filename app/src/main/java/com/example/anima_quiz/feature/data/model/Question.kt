@@ -8,15 +8,17 @@ data class Question(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val questionText: String,
-    val options: List<String>,
-    val correctAnswerIndex: Int,
+    var options: List<String>,
+    var correctAnswerIndex: Int,
     val imageUrl: Int,
     val tips: List<String>
 ){
-    fun randomizeOptions(): Question {
+    fun randomizeOptions() {
         val shuffledOptions = options.shuffled()
         val newCorrectAnswerIndex = shuffledOptions.indexOf(options[correctAnswerIndex])
-        return copy(options = shuffledOptions, correctAnswerIndex = newCorrectAnswerIndex)
+        this.options = shuffledOptions
+        this.correctAnswerIndex = newCorrectAnswerIndex
+
     }
 }
 
