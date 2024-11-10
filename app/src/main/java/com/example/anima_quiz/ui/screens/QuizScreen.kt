@@ -27,6 +27,7 @@ fun QuizScreen(
     navController: NavHostController,
 ) {
 
+    var isLoading by remember { mutableStateOf(true) }
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var score by remember { mutableStateOf<Float>(0.0f) }
     var showScore by remember { mutableStateOf(false) }
@@ -42,58 +43,77 @@ fun QuizScreen(
         timeRemaining = remaining
     }
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)),
-        contentAlignment = Alignment.Center
-    ) {
-        if (showScore) {
-            QuizCompleted(
-                score = score,
-                total = questions.size,
-                onRestart = {
-                    currentQuestionIndex = 0
-                    score = 0.0f
-                    showScore = false
-                }
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(1000)
+        isLoading = false
+    }
+    if (isLoading) {
+        // Loading animation
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.primary,
+                strokeWidth = 4.dp
             )
-        } else {
+        }
+    }
+    else {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)),
+            contentAlignment = Alignment.Center
+        ) {
+            if (showScore) {
+                QuizCompleted(
+                    score = score,
+                    total = questions.size,
+                    onRestart = {
+                        currentQuestionIndex = 0
+                        score = 0.0f
+                        showScore = false
+                    }
+                )
+            } else {
 
-            if (currentQuestionIndex < questions.size && isCorrect == null) {
+                if (currentQuestionIndex < questions.size && isCorrect == null) {
 
-                questions[currentQuestionIndex].randomizeOptions()
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
+                    questions[currentQuestionIndex].randomizeOptions()
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
 
-                    QuestionTimer(timeLimit, onTimeUp = onTimeUp, onTimeRemaining = onTimeRemaining)
-                    QuizQuestionView(
-                        image = questions[currentQuestionIndex].imageUrl,
-                        question = questions[currentQuestionIndex].questionText,
-                        tip = questions[currentQuestionIndex].tips.random(),
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
+                        QuestionTimer(timeLimit, onTimeUp = onTimeUp, onTimeRemaining = onTimeRemaining)
+                        QuizQuestionView(
+                            image = questions[currentQuestionIndex].imageUrl,
+                            question = questions[currentQuestionIndex].questionText,
+                            tip = questions[currentQuestionIndex].tips.random(),
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
 
-                    QuizButtons(
-                        answers = questions[currentQuestionIndex].options,
-                        onAnswerSelected = { selectedAnswer ->
-                            isCorrect = questions[currentQuestionIndex].options.indexOf(selectedAnswer) == questions[currentQuestionIndex].correctAnswerIndex
-                            if (isCorrect == true) {
-                                score += (timeRemaining / timeLimit.toFloat())
+                        QuizButtons(
+                            answers = questions[currentQuestionIndex].options,
+                            onAnswerSelected = { selectedAnswer ->
+                                isCorrect = questions[currentQuestionIndex].options.indexOf(selectedAnswer) == questions[currentQuestionIndex].correctAnswerIndex
+                                if (isCorrect == true) {
+                                    score += (timeRemaining / timeLimit.toFloat())
 
+                                }
+                                // No LaunchedEffect here
                             }
-                            // No LaunchedEffect here
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
     }
-
     // LaunchedEffect outside the lambda, observing changes to isCorrect
     if (isCorrect != null) {
         Box(
