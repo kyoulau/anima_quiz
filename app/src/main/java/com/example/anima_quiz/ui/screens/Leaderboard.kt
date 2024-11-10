@@ -10,44 +10,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
-import kotlin.math.roundToInt
-
-data class Player(
-    val name: String,
-    val correctAnswers: Int,
-    val averageResponseTime: Double
-)
+import com.example.anima_quiz.feature.data.model.Player
 
 @Composable
 fun LeaderboardScreen(players: List<Player>) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp)
     ) {
-        Text(
-            text = "Leaderboard",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 16.dp)
-        )
+        // Header
+        item {
+            Text(
+                text = "Leaderboard",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(vertical = 8.dp)
-        ) {
-            itemsIndexed(players) { index, player ->
-                PlayerItem(position = index + 1, player = player)
-            }
+        // List of players
+        itemsIndexed(players) { index, player ->
+            PlayerItem(position = index + 1, player = player)
         }
     }
 }
@@ -56,9 +50,8 @@ fun LeaderboardScreen(players: List<Player>) {
 fun PlayerItem(position: Int, player: Player) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
+            .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
@@ -67,7 +60,6 @@ fun PlayerItem(position: Int, player: Player) {
                 .padding(vertical = 12.dp, horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Posição
             Text(
                 text = "$position",
                 fontSize = 18.sp,
@@ -76,10 +68,9 @@ fun PlayerItem(position: Int, player: Player) {
                 modifier = Modifier.width(40.dp)
             )
 
-            // Nome do jogador
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = player.name,
+                    text = player.nickname,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -87,12 +78,12 @@ fun PlayerItem(position: Int, player: Player) {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "Respostas Corretas: ${player.correctAnswers}",
+                    text = "Pontuação: ${player.score}",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
                 Text(
-                    text = "Tempo Médio: ${player.averageResponseTime.roundToInt()} seg",
+                    text = "Maior Pontuação: ${player.higherScore}",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
@@ -105,11 +96,21 @@ fun PlayerItem(position: Int, player: Player) {
 @Composable
 fun PreviewLeaderboardScreen() {
     val samplePlayers = listOf(
-        Player(name = "Alice", correctAnswers = 15, averageResponseTime = 3.2),
-        Player(name = "Bob", correctAnswers = 12, averageResponseTime = 4.1),
-        Player(name = "Charlie", correctAnswers = 11, averageResponseTime = 5.0),
-        Player(name = "David", correctAnswers = 9, averageResponseTime = 6.2),
-        Player(name = "Eve", correctAnswers = 8, averageResponseTime = 7.5)
+        Player(nickname = "Player 1", score = 100, higherScore = 200),
+        Player(nickname = "Player 2", score = 80, higherScore = 150),
+        Player(nickname = "Player 3", score = 120, higherScore = 250),
+        Player(nickname = "Player 4", score = 90, higherScore = 180),
+        Player(nickname = "Player 5", score = 110, higherScore = 220),
+        Player(nickname = "Player 6", score = 70, higherScore = 160),
+        Player(nickname = "Player 7", score = 95, higherScore = 195),
+        Player(nickname = "Player 8", score = 105, higherScore = 215),
+        Player(nickname = "Player 9", score = 85, higherScore = 175),
+        Player(nickname = "Player 10", score = 130, higherScore = 280),
+        Player(nickname = "Player 11", score = 115, higherScore = 230),
+        Player(nickname = "Player 12", score = 75, higherScore = 165),
+        Player(nickname = "Player 13", score = 125, higherScore = 255),
+        Player(nickname = "Player 14", score = 85, higherScore = 185),
+        Player(nickname = "Player 15", score = 135, higherScore = 285)
     )
     LeaderboardScreen(players = samplePlayers)
 }

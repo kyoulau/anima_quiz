@@ -1,6 +1,5 @@
 package com.example.anima_quiz.feature.data.model
 
-import android.provider.ContactsContract.CommonDataKinds.Nickname
 import androidx.room.Entity
 import  androidx.room.PrimaryKey
 
