@@ -1,4 +1,3 @@
-// QuizScreen.kt
 package com.example.anima_quiz.ui
 
 import android.icu.text.DecimalFormat
@@ -32,11 +31,11 @@ fun QuizScreen(
     var score by remember { mutableStateOf<Float>(0.0f) }
     var showScore by remember { mutableStateOf(false) }
     var isCorrect by remember { mutableStateOf<Boolean?>(null) }
-    val timeLimit = 15.0f // 15 seconds per question
+    val timeLimit = 15.0f
     var timeRemaining by remember { mutableStateOf<Float>(timeLimit) }
 
     val onTimeUp = {
-        isCorrect = false // Treat as incorrect if time runs out
+        isCorrect = false
     }
 
     val onTimeRemaining: (Float) -> Unit = { remaining ->
@@ -90,7 +89,11 @@ fun QuizScreen(
                             .padding(16.dp)
                     ) {
 
-                        QuestionTimer(timeLimit, onTimeUp = onTimeUp, onTimeRemaining = onTimeRemaining)
+                        QuestionTimer(
+                            timeLimit,
+                            onTimeUp = onTimeUp,
+                            onTimeRemaining = onTimeRemaining
+                        )
                         QuizQuestionView(
                             image = questions[currentQuestionIndex].imageUrl,
                             question = questions[currentQuestionIndex].questionText,
@@ -101,12 +104,12 @@ fun QuizScreen(
                         QuizButtons(
                             answers = questions[currentQuestionIndex].options,
                             onAnswerSelected = { selectedAnswer ->
-                                isCorrect = questions[currentQuestionIndex].options.indexOf(selectedAnswer) == questions[currentQuestionIndex].correctAnswerIndex
+                                isCorrect =
+                                    questions[currentQuestionIndex].options.indexOf(selectedAnswer) == questions[currentQuestionIndex].correctAnswerIndex
                                 if (isCorrect == true) {
                                     score += (timeRemaining / timeLimit.toFloat())
 
                                 }
-                                // No LaunchedEffect here
                             }
                         )
                     }
@@ -114,6 +117,7 @@ fun QuizScreen(
             }
         }
     }
+
     // LaunchedEffect outside the lambda, observing changes to isCorrect
     if (isCorrect != null) {
         Box(
@@ -132,7 +136,7 @@ fun QuizScreen(
             ) {
                 Text(
                     text = if (isCorrect == true) "Correct!" else "Incorrect!",
-                    color = if (isCorrect == true) Color(0xFF4CAF50) else Color(0xFFF44336), // Green and red tones for feedback
+                    color = if (isCorrect == true) Color(0xFF4CAF50) else Color(0xFFF44336),
                     style = MaterialTheme.typography.headlineMedium.copy(
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold
@@ -164,7 +168,7 @@ fun QuizScreen(
         }
 
         LaunchedEffect(key1 = isCorrect) {
-            kotlinx.coroutines.delay(3000) // 3-second delay for feedback display
+            kotlinx.coroutines.delay(3000)
             isCorrect = null
             currentQuestionIndex += 1
             if (currentQuestionIndex >= questions.size) {
@@ -176,20 +180,20 @@ fun QuizScreen(
 }
 @Composable
 fun QuestionTimer(
-    timeLimit: Float, // in seconds
+    timeLimit: Float,
     onTimeUp: () -> Unit,
     onTimeRemaining: (Float) -> Unit
 ) {
-    val timeLimitMillis = (timeLimit * 1000).toInt() // Convert time limit to milliseconds
+    val timeLimitMillis = (timeLimit * 1000).toInt()
     var timeRemainingMillis by remember { mutableStateOf(timeLimitMillis) }
 
     LaunchedEffect(timeRemainingMillis) {
         if (timeRemainingMillis > 0) {
-            kotlinx.coroutines.delay(100L) // wait for 0.2 second (200 milliseconds)
-            timeRemainingMillis -= 100 // reduce time by 200 milliseconds
-            onTimeRemaining(timeRemainingMillis / 1000f) // convert to seconds for onTimeRemaining
+            kotlinx.coroutines.delay(100L)
+            timeRemainingMillis -= 100
+            onTimeRemaining(timeRemainingMillis / 1000f)
         } else {
-            onTimeUp() // Trigger when the time is up
+            onTimeUp()
         }
     }
 

@@ -15,8 +15,6 @@ data class Question(
 ){
     fun randomizeOptions() {
         val shuffledOptions = options.shuffled()
-        print("teste")
-        print(shuffledOptions)
         val newCorrectAnswerIndex = shuffledOptions.indexOf(options[correctAnswerIndex])
         this.options = shuffledOptions
         this.correctAnswerIndex = newCorrectAnswerIndex
