@@ -23,7 +23,7 @@ fun QuizButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .height(100.dp),
+            .height(75.dp),
         shape = RoundedCornerShape(25.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,

@@ -12,6 +12,8 @@ import com.example.anima_quiz.ui.QuizApp
 import com.example.anima_quiz.ui.screens.MainScreen
 import com.example.anima_quiz.ui.screens.Welcome
 import com.example.anima_quiz.feature.data.database.QuizDatabase
+import com.example.anima_quiz.feature.data.model.Question
+import com.example.anima_quiz.feature.data.model.QuestionList
 import com.example.anima_quiz.feature.data.repository.QuestionRepository
 import com.example.anima_quiz.feature.data.viewModel.QuizViewModelFactory
 
@@ -35,6 +37,8 @@ fun MyApp() {
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
+    val questions = QuestionList().loadQuestion()
+
     NavHost(navController = navController, startDestination = "welcome") {
         composable("welcome") {
             Welcome(onContinueClicked = {
@@ -51,7 +55,7 @@ fun SetupNavGraph(navController: NavHostController) {
             }
         }
         composable("quizScreen") {
-            QuizApp(navController)
+            QuizApp(navController, questions)
         }
     }
 }

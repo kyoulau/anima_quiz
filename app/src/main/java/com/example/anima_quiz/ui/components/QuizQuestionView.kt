@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +22,7 @@ import com.example.anima_quiz.R
 fun QuizQuestionView(
     image: Int,
     question: String,
+    tip: String,
     modifier: Modifier = Modifier
 ) {
     Image(
@@ -34,9 +36,19 @@ fun QuizQuestionView(
 
     Text(
         text = question,
-        style = MaterialTheme.typography.headlineMedium.copy(fontSize = 24.sp),
+        style = MaterialTheme.typography.headlineMedium.copy(fontSize = 20.sp),
         textAlign = TextAlign.Center,
         modifier = modifier
             .fillMaxWidth()
     )
+    Text(
+        text = "dica: $tip",
+        style = MaterialTheme.typography.headlineMedium.copy(fontSize = 16.sp),
+        textAlign = TextAlign.Center,
+        modifier = modifier
+            .padding(top = 8.dp)
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.4f), shape = RoundedCornerShape(16.dp))
+    )
+
 }

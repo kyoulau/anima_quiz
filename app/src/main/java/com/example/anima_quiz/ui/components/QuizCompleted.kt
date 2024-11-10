@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun QuizCompleted(
-    score: Int,
+    score: Float,
     total: Int,
     onRestart: () -> Unit,
     modifier: Modifier = Modifier
@@ -50,7 +50,7 @@ fun QuizCompleted(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
             Text(
-                text = "Your Score: $score / $total",
+                text = "Your Score: ${String.format("%.2f", score)} / $total",
                 style = MaterialTheme.typography.titleLarge.copy(fontSize = 24.sp),
                 color = Color.Gray,
                 textAlign = TextAlign.Center

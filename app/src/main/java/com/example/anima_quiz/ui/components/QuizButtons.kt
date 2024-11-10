@@ -27,7 +27,7 @@ fun QuizButtons(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = spacing/2),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    horizontalArrangement = Arrangement.spacedBy(spacing)
             ) {
                 if (i + 1 >= answers.size) {
                     Spacer(modifier = Modifier.weight(0.5f)) // Empty space to balance the row
