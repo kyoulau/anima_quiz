@@ -1,4 +1,4 @@
-package com.example.anima_quiz.ui
+package com.example.anima_quiz.ui.screens
 
 import android.icu.text.DecimalFormat
 import android.media.AudioManager
@@ -38,6 +38,7 @@ fun QuizScreen(
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var score by remember { mutableStateOf<Float>(0.0f) }
     var showScore by remember { mutableStateOf(false) }
+    var showLeaderboard by remember { mutableStateOf(false) }
     var isCorrect by remember { mutableStateOf<Boolean?>(null) }
     val timeLimit = 15.0f
     var timeRemaining by remember { mutableStateOf<Float>(timeLimit) }
@@ -92,7 +93,7 @@ fun QuizScreen(
             )
         }
     }
-    else {
+    else{
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -103,13 +104,22 @@ fun QuizScreen(
                 QuizCompleted(
                     score = score,
                     total = questions.size,
-                    onRestart = {
-                        currentQuestionIndex = 0
-                        score = 0.0f
+                    onContinue = {
                         showScore = false
+                        showLeaderboard = true
+
                     }
                 )
-            } else {
+            }
+            else if (showLeaderboard){
+                Leaderboard(onRestart = {
+                    currentQuestionIndex = 0
+                    score = 0.0f
+                    showScore = false
+                    showLeaderboard = false
+                })
+            }
+            else {
 
                 if (currentQuestionIndex < questions.size && isCorrect == null) {
 
@@ -152,6 +162,7 @@ fun QuizScreen(
             }
         }
     }
+
 
     if (isCorrect != null) {
         Box(

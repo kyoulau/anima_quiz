@@ -1,4 +1,4 @@
-package com.example.anima_quiz.ui.screens
+package com.example.anima_quiz.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 fun QuizCompleted(
     score: Float,
     total: Int,
-    onRestart: () -> Unit,
+    onContinue: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -57,7 +57,7 @@ fun QuizCompleted(
             )
             Spacer(modifier = Modifier.height(24.dp))
             Button(
-                onClick = onRestart,
+                onClick = onContinue,
                 shape = RoundedCornerShape(25.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondary,
@@ -67,7 +67,7 @@ fun QuizCompleted(
                     .height(50.dp)
                     .width(200.dp)
             ) {
-                Text("Restart Quiz", color = Color.White, fontWeight = FontWeight.Bold)
+                Text("Continuar", color = Color.White, fontWeight = FontWeight.Bold)
             }
         }
     }

@@ -10,14 +10,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.anima_quiz.ui.QuizApp
 import com.example.anima_quiz.ui.screens.MainScreen
-import com.example.anima_quiz.ui.screens.Welcome
+import com.example.anima_quiz.ui.components.Welcome
 import com.example.anima_quiz.feature.data.database.QuizDatabase
-import com.example.anima_quiz.feature.data.model.Question
 import com.example.anima_quiz.feature.data.model.QuestionList
 import com.example.anima_quiz.feature.data.model.Player
 import com.example.anima_quiz.feature.data.repository.QuestionRepository
 import com.example.anima_quiz.feature.data.viewModel.QuizViewModelFactory
-import com.example.anima_quiz.ui.screens.LeaderboardScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,5 +70,6 @@ fun SetupNavGraph(navController: NavHostController) {
         composable("quizScreen") {
             QuizApp(navController, questions)
         }
+
     }
 }
