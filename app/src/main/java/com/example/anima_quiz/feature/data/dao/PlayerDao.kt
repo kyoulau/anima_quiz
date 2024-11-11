@@ -16,7 +16,7 @@ interface PlayerDao {
     suspend fun listPlayers(players: List<Player>)
 
     @Query("SELECT * FROM players ORDER BY score DESC")
-    fun getAllPlayers(): List<Player>
+    suspend fun getAllPlayers(): List<Player>
 
     @Query("DELETE FROM players")
     suspend fun deleteAllPlayers()

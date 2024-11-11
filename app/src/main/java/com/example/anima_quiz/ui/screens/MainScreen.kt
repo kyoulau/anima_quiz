@@ -61,5 +61,5 @@ fun MainScreen(onContinueClicked: (String) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewMainScreen() {
-    Welcome(onContinueClicked = {})
+    Welcome(onContinueClicked = {}, onPlacarClicked = {})
 }

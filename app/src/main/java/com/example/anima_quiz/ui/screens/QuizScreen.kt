@@ -24,10 +24,13 @@ import java.math.RoundingMode
 
 import android.content.Context
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.anima_quiz.feature.data.viewModel.PlayerViewModel
 
 
 @Composable
 fun QuizScreen(
+    playerViewModel: PlayerViewModel,
     questions: List<Question>,
     modifier: Modifier = Modifier,
     navController: NavHostController,
@@ -102,22 +105,27 @@ fun QuizScreen(
         ) {
             if (showScore) {
                 QuizCompleted(
+                    playerViewModel= playerViewModel,
+                    nav = navController,
                     score = score,
                     total = questions.size,
                     onContinue = {
                         showScore = false
                         showLeaderboard = true
-
                     }
                 )
             }
             else if (showLeaderboard){
-                Leaderboard(onRestart = {
+                LeaderboardScreen(
+                    playerViewModel = playerViewModel,
+                    onRestart = {
                     currentQuestionIndex = 0
                     score = 0.0f
                     showScore = false
                     showLeaderboard = false
-                })
+                    },
+                    sair = {navController.navigate("welcome")}
+                )
             }
             else {
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,8 +15,11 @@ import com.example.anima_quiz.ui.components.Welcome
 import com.example.anima_quiz.feature.data.database.QuizDatabase
 import com.example.anima_quiz.feature.data.model.QuestionList
 import com.example.anima_quiz.feature.data.model.Player
+import com.example.anima_quiz.feature.data.repository.PlayerRepository
 import com.example.anima_quiz.feature.data.repository.QuestionRepository
+import com.example.anima_quiz.feature.data.viewModel.PlayerViewModel
 import com.example.anima_quiz.feature.data.viewModel.QuizViewModelFactory
+import com.example.anima_quiz.ui.screens.LeaderboardScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,11 +56,19 @@ val samplePlayers = listOf(
 fun SetupNavGraph(navController: NavHostController) {
     val questions = QuestionList().loadQuestion()
 
+    val context = LocalContext.current
+    val playerDao = QuizDatabase.getDatabase(context).playerDao()
+    val playerRepository = PlayerRepository(playerDao)
+    val playerViewModel = PlayerViewModel(playerRepository)
+
     NavHost(navController = navController, startDestination = "welcome") {
         composable("welcome") {
             Welcome(onContinueClicked = {
                 navController.navigate("main")
-            })
+            },onPlacarClicked = {
+                navController.navigate("leaderboard")
+            }
+                )
         }
         composable("main") {
             MainScreen { userName ->
@@ -68,7 +80,10 @@ fun SetupNavGraph(navController: NavHostController) {
             }
         }
         composable("quizScreen") {
-            QuizApp(navController, questions)
+            QuizApp(navController, questions, playerViewModel=playerViewModel)
+        }
+        composable("leaderboard") {
+            LeaderboardScreen(playerViewModel = playerViewModel, sair = { navController.navigate("welcome")}, onRestart = {navController.navigate("main")})
         }
 
     }
