@@ -52,11 +52,9 @@ fun QuizScreen(
 
     fun playCorrectSound(context: Context) {
         try {
-            // Create MediaPlayer instance and use create() to load the audio resource
             val mediaPlayer = MediaPlayer.create(context, R.raw.correct_sound)
-            mediaPlayer?.start() // Start playing the sound
+            mediaPlayer?.start()
 
-            // Release resources after the sound has finished playing
             mediaPlayer?.setOnCompletionListener {
                 mediaPlayer.release()
             }
@@ -66,11 +64,9 @@ fun QuizScreen(
     }
     fun playWrongSound(context: Context) {
         try {
-            // Create MediaPlayer instance and use create() to load the audio resource
             val mediaPlayer = MediaPlayer.create(context, R.raw.wrong_sound)
-            mediaPlayer?.start() // Start playing the sound
+            mediaPlayer?.start()
 
-            // Release resources after the sound has finished playing
             mediaPlayer?.setOnCompletionListener {
                 mediaPlayer.release()
             }
