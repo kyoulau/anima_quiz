@@ -1,6 +1,8 @@
 package com.example.anima_quiz.ui
 
 import android.icu.text.DecimalFormat
+import android.media.AudioManager
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,10 +16,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.anima_quiz.R
 import com.example.anima_quiz.data.QuizQuestion
 import com.example.anima_quiz.feature.data.model.Question
 import com.example.anima_quiz.ui.components.*
 import java.math.RoundingMode
+
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
+
 
 @Composable
 fun QuizScreen(
@@ -25,7 +32,9 @@ fun QuizScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
 ) {
+    val context = LocalContext.current
 
+    var isLoading by remember { mutableStateOf(true) }
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var score by remember { mutableStateOf<Float>(0.0f) }
     var showScore by remember { mutableStateOf(false) }
@@ -41,52 +50,104 @@ fun QuizScreen(
         timeRemaining = remaining
     }
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)),
-        contentAlignment = Alignment.Center
-    ) {
-        if (showScore) {
-            QuizCompleted(
-                score = score,
-                total = questions.size,
-                onRestart = {
-                    currentQuestionIndex = 0
-                    score = 0.0f
-                    showScore = false
-                }
+    fun playCorrectSound(context: Context) {
+        try {
+            val mediaPlayer = MediaPlayer.create(context, R.raw.correct_sound)
+            mediaPlayer?.start()
+
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer.release()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+    fun playWrongSound(context: Context) {
+        try {
+            val mediaPlayer = MediaPlayer.create(context, R.raw.wrong_sound)
+            mediaPlayer?.start()
+
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer.release()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(1000)
+        isLoading = false
+    }
+    if (isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.primary,
+                strokeWidth = 4.dp
             )
-        } else {
+        }
+    }
+    else {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)),
+            contentAlignment = Alignment.Center
+        ) {
+            if (showScore) {
+                QuizCompleted(
+                    score = score,
+                    total = questions.size,
+                    onRestart = {
+                        currentQuestionIndex = 0
+                        score = 0.0f
+                        showScore = false
+                    }
+                )
+            } else {
 
-            if (currentQuestionIndex < questions.size && isCorrect == null) {
+                if (currentQuestionIndex < questions.size && isCorrect == null) {
 
-                questions[currentQuestionIndex].randomizeOptions()
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
+                    questions[currentQuestionIndex].randomizeOptions()
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
 
-                    QuestionTimer(timeLimit, onTimeUp = onTimeUp, onTimeRemaining = onTimeRemaining)
-                    QuizQuestionView(
-                        image = questions[currentQuestionIndex].imageUrl,
-                        question = questions[currentQuestionIndex].questionText,
-                        tip = questions[currentQuestionIndex].tips.random(),
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
+                        QuestionTimer(
+                            timeLimit,
+                            onTimeUp = onTimeUp,
+                            onTimeRemaining = onTimeRemaining
+                        )
+                        QuizQuestionView(
+                            image = questions[currentQuestionIndex].imageUrl,
+                            question = questions[currentQuestionIndex].questionText,
+                            tip = questions[currentQuestionIndex].tips.random(),
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
 
-                    QuizButtons(
-                        answers = questions[currentQuestionIndex].options,
-                        onAnswerSelected = { selectedAnswer ->
-                            isCorrect = questions[currentQuestionIndex].options.indexOf(selectedAnswer) == questions[currentQuestionIndex].correctAnswerIndex
-                            if (isCorrect == true) {
-                                score += (timeRemaining / timeLimit.toFloat())
-
+                        QuizButtons(
+                            answers = questions[currentQuestionIndex].options,
+                            onAnswerSelected = { selectedAnswer ->
+                                isCorrect =
+                                    questions[currentQuestionIndex].options.indexOf(selectedAnswer) == questions[currentQuestionIndex].correctAnswerIndex
+                                if (isCorrect == true) {
+                                    score += (timeRemaining / timeLimit.toFloat())
+                                    playCorrectSound(context)
+                                }
+                                else{
+                                    playWrongSound(context)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
