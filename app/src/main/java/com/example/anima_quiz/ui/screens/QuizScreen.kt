@@ -1,6 +1,8 @@
 package com.example.anima_quiz.ui
 
 import android.icu.text.DecimalFormat
+import android.media.AudioManager
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,10 +16,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.anima_quiz.R
 import com.example.anima_quiz.data.QuizQuestion
 import com.example.anima_quiz.feature.data.model.Question
 import com.example.anima_quiz.ui.components.*
 import java.math.RoundingMode
+
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
+
 
 @Composable
 fun QuizScreen(
@@ -25,6 +32,7 @@ fun QuizScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
 ) {
+    val context = LocalContext.current
 
     var isLoading by remember { mutableStateOf(true) }
     var currentQuestionIndex by remember { mutableStateOf(0) }
@@ -40,6 +48,35 @@ fun QuizScreen(
 
     val onTimeRemaining: (Float) -> Unit = { remaining ->
         timeRemaining = remaining
+    }
+
+    fun playCorrectSound(context: Context) {
+        try {
+            // Create MediaPlayer instance and use create() to load the audio resource
+            val mediaPlayer = MediaPlayer.create(context, R.raw.correct_sound)
+            mediaPlayer?.start() // Start playing the sound
+
+            // Release resources after the sound has finished playing
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer.release()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+    fun playWrongSound(context: Context) {
+        try {
+            // Create MediaPlayer instance and use create() to load the audio resource
+            val mediaPlayer = MediaPlayer.create(context, R.raw.wrong_sound)
+            mediaPlayer?.start() // Start playing the sound
+
+            // Release resources after the sound has finished playing
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer.release()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -107,7 +144,10 @@ fun QuizScreen(
                                     questions[currentQuestionIndex].options.indexOf(selectedAnswer) == questions[currentQuestionIndex].correctAnswerIndex
                                 if (isCorrect == true) {
                                     score += (timeRemaining / timeLimit.toFloat())
-
+                                    playCorrectSound(context)
+                                }
+                                else{
+                                    playWrongSound(context)
                                 }
                             }
                         )
