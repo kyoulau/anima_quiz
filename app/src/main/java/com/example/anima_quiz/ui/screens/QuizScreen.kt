@@ -1,4 +1,4 @@
-package com.example.anima_quiz.ui
+package com.example.anima_quiz.ui.screens
 
 import android.icu.text.DecimalFormat
 import android.media.AudioManager
@@ -24,10 +24,13 @@ import java.math.RoundingMode
 
 import android.content.Context
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.anima_quiz.feature.data.viewModel.PlayerViewModel
 
 
 @Composable
 fun QuizScreen(
+    playerViewModel: PlayerViewModel,
     questions: List<Question>,
     modifier: Modifier = Modifier,
     navController: NavHostController,
@@ -38,6 +41,7 @@ fun QuizScreen(
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var score by remember { mutableStateOf<Float>(0.0f) }
     var showScore by remember { mutableStateOf(false) }
+    var showLeaderboard by remember { mutableStateOf(false) }
     var isCorrect by remember { mutableStateOf<Boolean?>(null) }
     val timeLimit = 15.0f
     var timeRemaining by remember { mutableStateOf<Float>(timeLimit) }
@@ -92,7 +96,7 @@ fun QuizScreen(
             )
         }
     }
-    else {
+    else{
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -101,15 +105,29 @@ fun QuizScreen(
         ) {
             if (showScore) {
                 QuizCompleted(
+                    playerViewModel= playerViewModel,
+                    nav = navController,
                     score = score,
                     total = questions.size,
-                    onRestart = {
-                        currentQuestionIndex = 0
-                        score = 0.0f
+                    onContinue = {
                         showScore = false
+                        showLeaderboard = true
                     }
                 )
-            } else {
+            }
+            else if (showLeaderboard){
+                LeaderboardScreen(
+                    playerViewModel = playerViewModel,
+                    onRestart = {
+                    currentQuestionIndex = 0
+                    score = 0.0f
+                    showScore = false
+                    showLeaderboard = false
+                    },
+                    sair = {navController.navigate("welcome")}
+                )
+            }
+            else {
 
                 if (currentQuestionIndex < questions.size && isCorrect == null) {
 
@@ -152,6 +170,7 @@ fun QuizScreen(
             }
         }
     }
+
 
     if (isCorrect != null) {
         Box(

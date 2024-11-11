@@ -1,4 +1,4 @@
-package com.example.anima_quiz.ui.screens
+package com.example.anima_quiz.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.example.anima_quiz.R
 
 @Composable
-fun Welcome(onContinueClicked: () -> Unit) {
+fun Welcome(onContinueClicked: () -> Unit, onPlacarClicked: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -61,6 +61,14 @@ fun Welcome(onContinueClicked: () -> Unit) {
             ) {
                 Text("Começar")
             }
+            Button(
+                onClick = { onPlacarClicked() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp)
+            ) {
+                Text("Ver Placar")
+            }
         }
     }
 }
@@ -68,5 +76,5 @@ fun Welcome(onContinueClicked: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewWelcomeScreen() {
-    Welcome(onContinueClicked = {})
+    Welcome(onContinueClicked = {}, onPlacarClicked = {})
 }
