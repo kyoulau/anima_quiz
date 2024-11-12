@@ -107,7 +107,7 @@ fun QuizScreen(
                 QuizCompleted(
                     playerViewModel= playerViewModel,
                     nav = navController,
-                    score = score,
+                    score = score.toInt(),
                     total = questions.size,
                     onContinue = {
                         showScore = false
@@ -157,7 +157,7 @@ fun QuizScreen(
                                 isCorrect =
                                     questions[currentQuestionIndex].options.indexOf(selectedAnswer) == questions[currentQuestionIndex].correctAnswerIndex
                                 if (isCorrect == true) {
-                                    score += (timeRemaining / timeLimit.toFloat())
+                                    score += (timeRemaining / timeLimit.toFloat()) * 1000
                                     playCorrectSound(context)
                                 }
                                 else{
