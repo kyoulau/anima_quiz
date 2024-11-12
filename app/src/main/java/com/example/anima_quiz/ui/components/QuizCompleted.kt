@@ -30,7 +30,7 @@ import com.example.anima_quiz.feature.data.viewModel.PlayerViewModel
 fun QuizCompleted(
     playerViewModel: PlayerViewModel,
     nav: NavHostController,
-    score: Float,
+    score: Int,
     total: Int,
     onContinue: () -> Unit,
     modifier: Modifier = Modifier
@@ -44,8 +44,8 @@ fun QuizCompleted(
             // Create or update the Player object
             val player = Player(
                 nickname = userName,
-                score = score.toInt(),
-                higherScore = score.toInt() // Set higherScore to current score initially
+                score = score,
+                higherScore = score // Set higherScore to current score initially
             )
             playerViewModel.insertOrUpdatePlayer(player)
         }
@@ -80,7 +80,7 @@ fun QuizCompleted(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
             Text(
-                text = "Your Score: ${String.format("%.2f", score)} / $total",
+                text = "Your Score \n $score / ${total * 1000}",
                 style = MaterialTheme.typography.titleLarge.copy(fontSize = 24.sp),
                 color = Color.Gray,
                 textAlign = TextAlign.Center
